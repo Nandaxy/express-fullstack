@@ -174,7 +174,7 @@
               <div class="hidden md:block">
                 <div class="flex items-center space-x-4 mt-4">
                   <span class="flex items-center font-semibold"
-                    ><%= user.numberOfPosts %>
+                    ><%= posts.length %>
                     <p class="ml-1 font-normal">Postingan</p></span
                   >
                   <span class="flex items-center font-semibold"
@@ -219,8 +219,11 @@
             </div>
           </div>
 
-          <%- include('components/profile/Post')  %>
+          <%-  include('components/profile/Post')  %>
 
+
+          </div>
+          </div>
         </div>
        
       </div>

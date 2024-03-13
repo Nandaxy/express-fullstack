@@ -2,7 +2,9 @@
   class="flex w-full justify-center items-center border-b border-gray-200 dark:border-darkBorder"
 >
   <div class="flex space-x-10 py-2">
-    <span class="border-b border-gray-200 dark:border-darkBorder py-2 font-semibold">
+    <span
+      class="border-b border-gray-200 dark:border-darkBorder py-2 font-semibold"
+    >
       <div class="flex items-center">
         <span
           ><svg
@@ -45,4 +47,16 @@
       </div>
     </span>
   </div>
+  
 </div>
+<div class="posts">
+  <% if (posts.length > 0) { %>
+    <% posts.forEach(function(post) { %>
+      <div class="post">
+        <p><%= post.id %></p>
+        <!-- Tambahkan logika untuk menampilkan informasi lainnya jika diperlukan -->
+      </div>
+    <% }) %>
+  <% } else { %>
+    <p>Tidak ada posting yang ditemukan.</p>
+  <% } %>

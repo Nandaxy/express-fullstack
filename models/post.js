@@ -16,7 +16,6 @@ const postSchema = new mongoose.Schema({
     type: String,
     ref: "Users",
   },
-
   imageUrls: {
     type: [String],
     default: [],
@@ -25,10 +24,31 @@ const postSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
-  comment: {
-    type: [mongoose.Schema.Types.ObjectId],
-    ref: "User",
-    default: [],
+  comments: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      default: [],
+    },
+  ],
+  like: {
+    type: Number,
+    default: 0,
+  },
+  likes: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      default: [],
+    },
+  ],
+  views: {
+    type: Number,
+    default: 0,
+  },
+  share: {
+    type: Number,
+    default: 0,
   },
 });
 

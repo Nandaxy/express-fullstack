@@ -63,7 +63,7 @@
             </div>
             <!-- content postingan -->
             <div class="px-6 mt-3">
-              <p id="postContent"></p>
+              <div id="postContent"></div>
             </div>
           </div>
           <!-- selesai si -->
@@ -74,17 +74,17 @@
             <div class="py-4 px-8">
               <div class="flex justify-between">
                 <div class="flex items-center">
-                  <p>icon</p>
-                  <p>Anda dan 716 Lainya</p>
+                  <i class="fa-solid fa-heart" style="color: #ff0000"></i>
+                  <p class="ml-2"><%= post.like %></p>
                 </div>
                 <div class="flex items-center space-x-2">
-                  <div class="flex space-x-1">
-                    <p>90</p>
-                    <p>icon</p>
+                  <div class="flex space-x-1 items-center">
+                    <p>0</p>
+                    <i class="fa-regular fa-comment"></i>
                   </div>
-                  <div class="flex space-x-1">
-                    <p>50</p>
-                    <p>icon</p>
+                  <div class="flex items-center space-x-1">
+                    <p><%= post.share %></p>
+                    <i class="fa-solid fa-share"></i>
                   </div>
                 </div>
               </div>
@@ -96,23 +96,32 @@
                 class="flex justify-between items-center space-x-6 md:space-x-12"
               >
                 <div
-                  class="flex w-full space-x-1 cursor-pointer py-2 justify-center items-center"
+                  class="flex w-full space-x-1 cursor-pointer py-2 justify-center items-center group transition-colors"
+                  title="sukai"
                 >
-                  <p>icon</p>
-                  <p>Likes</p>
+                  <span class="group-hover:text-red-500">
+                    <i class="fa-regular fa-heart fa-lg"></i>
+                  </span>
+
+                  <p class="mr-2 group-hover:text-red-500">Likes</p>
                 </div>
                 <div
-                  class="flex w-full space-x-1 cursor-pointer py-2 justify-center items-center"
+                  class="flex w-full space-x-1 cursor-pointer py-2 justify-center items-center group"
+                  title="beri komentar"
                 >
-                  <p>icon</p>
-                  <p>Comment</p>
+                  <i
+                    class="fa-regular fa-comment fa-lg group-hover:text-blue-500"
+                  ></i>
+                  <p class="mr-2 group-hover:text-blue-500">Comment</p>
                 </div>
-                <div
-                  class="flex w-full space-x-1 cursor-pointer py-2 justify-center items-center"
+                <button
+                  class="flex w-full space-x-1 cursor-pointer py-2 justify-center items-center group"
                 >
-                  <p>icon</p>
-                  <p>Share</p>
-                </div>
+                  <i
+                    class="fa-solid fa-share fa-lg group-hover:text-blue-500"
+                  ></i>
+                  <p class="mr-2 group-hover:text-blue-500">Share</p>
+                </button>
               </div>
             </div>
           </div>
@@ -122,31 +131,36 @@
 
     <script src="../js/script.js"></script>
     <script>
-      // Mendapatkan elemen span dengan id 'postContent'
-      var postContentElement = document.getElementById("postContent");
+      $(document).ready(function () {
+        // Ambil konten posting
+        let postContent = "<%= post.content %>";
 
-      // Konten posting
-      var postContent = `<%= post.content.replace(/\r?\n/gm, ',') %>`;
-      console.log(postContent);
-      // Menetapkan konten yang telah diformat dengan benar ke dalam elemen span
-      postContentElement.innerHTML = postContent;
+        // Pisahkan konten menjadi array dengan menggunakan newline sebagai pemisah
+        let postLines = postContent.split("\n");
+
+        // Loop melalui setiap baris konten
+        postLines.forEach(function (line) {
+          // Buat elemen <p> baru
+          let paragraph = document.createElement("p");
+
+          // Isi elemen <p> dengan konten dari setiap baris
+          paragraph.textContent = line;
+
+          // Tambahkan elemen <p> ke dalam div dengan id "postContent"
+          document.getElementById("postContent").appendChild(paragraph);
+        });
+      });
     </script>
-
     <script>
       $(document).ready(function () {
-        // Parsing waktu posting
         let postTime = new Date("<%= post.createdAt %>");
 
-        // Waktu saat ini
         let currentTime = new Date();
 
-        // Hitung perbedaan waktu dalam milidetik
         let timeDifference = currentTime - postTime;
 
-        // Konversi perbedaan waktu menjadi detik
         let timeDifferenceInSeconds = Math.floor(timeDifference / 1000);
 
-        // Fungsi untuk mengonversi detik menjadi format waktu yang diinginkan
         function formatTimeAgo(seconds) {
           let intervals = {
             tahun: 31536000,
@@ -174,25 +188,10 @@
           return "Baru saja";
         }
 
-        // Mengonversi perbedaan waktu dalam detik menjadi format waktu yang diinginkan
         let formattedTime = formatTimeAgo(timeDifferenceInSeconds);
 
-        // Memperbarui teks dalam elemen <p> dengan format waktu yang diinginkan
         $("#postTime").text(formattedTime);
       });
     </script>
-
-    <!-- <script>
-      $(document).ready(function () {
-        // Mengambil teks konten dari elemen dengan id "postContent"
-        var postContent = $("#postContent").text();
-        console.log(postContent)
-        // Mengganti karakter "\n" dengan tag <br> untuk garis baru
-        var formattedContent = postContent.replace(/\n/g, "<br>");
-        console.log(formattedContent)
-        // Memperbarui teks dalam elemen dengan id "postContent" dengan konten yang telah diformat
-        $("#postContent").html(formattedContent);
-      });
-    </script> -->
   </body>
 </html>

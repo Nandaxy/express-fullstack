@@ -2,8 +2,7 @@ const express = require("express");
 const router = express.Router();
 const User = require("../models/user");
 const Post = require("../models/post");
-const { createPost } = require('../controllers/controller');
-
+const { createPost } = require("../controllers/controller");
 
 const requireLogin = (req, res, next) => {
   if (!req.session.user) {
@@ -53,17 +52,28 @@ router.get("/@:namauser", async (req, res) => {
     const loggedInUser = req.session.user;
     const isSelfProfile = loggedInUser && loggedInUser.username === namauser;
     const loggedIn = req.session.user ? true : false;
-    // console.log(isSelfProfile)
-    // console.log(loggedIn)
-    // console.log(loggedInUser)
-    res.render("profile", { user, loggedIn, loggedInUser, isSelfProfile });
+
+    const createdBy = user._id;
+
+    const posts = await Post.find({ createdBy });
+
+    // console.log(posts);
+
+    res.render("profile", {
+      user,
+      loggedIn,
+      loggedInUser,
+      isSelfProfile,
+      posts,
+    });
   } catch (error) {
     console.error("Error fetching user profile:", error);
     res.status(500).send("Terjadi kesalahan saat mengambil profil pengguna.");
   }
 });
 
-router.post('/create-post', createPost);
+// rute post
+router.post("/create-post", createPost);
 
 router.get("/p/:id", async (req, res) => {
   try {
@@ -78,17 +88,21 @@ router.get("/p/:id", async (req, res) => {
     const isSelfPost = loggedInUser && loggedInUser.id === post.createdBy;
     const loggedIn = req.session.user ? true : false;
 
-
     const userPost = await User.findById(post.createdBy);
 
     console.log(userPost);
 
-    res.render("postDetail", { post, loggedIn, loggedInUser, isSelfPost, userPost });
+    res.render("postDetail", {
+      post,
+      loggedIn,
+      loggedInUser,
+      isSelfPost,
+      userPost,
+    });
   } catch (error) {
     console.error("Error fetching post detail:", error);
     res.status(500).send("Terjadi kesalahan saat mengambil detail posting.");
   }
 });
-
 
 module.exports = router;

@@ -1,10 +1,8 @@
-// Import model Post jika diperlukan
+
 const Post = require("../models/post");
 
-// Fungsi pengendali untuk menangani permintaan POST ke /create-post
 const createPost = async (req, res) => {
   try {
-    // Ambil ID pengguna yang sedang masuk
     const createdBy = req.session.user._id;
     // console.log(createdBy);
     // console.log(req.session.user);
@@ -21,7 +19,7 @@ const createPost = async (req, res) => {
 
     const savedPost = await newPost.save();
 
-    // Kirim respons ke klien
+    
     res.status(201).json(savedPost);
   } catch (error) {
     console.error("Terjadi kesalahan:", error);
@@ -31,7 +29,6 @@ const createPost = async (req, res) => {
   }
 };
 
-// Export fungsi pengendali agar dapat digunakan di rute
 module.exports = {
   createPost,
 };

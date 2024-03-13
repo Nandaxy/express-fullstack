@@ -1,0 +1,31 @@
+{
+  "name": "express-fullstack",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon app.js",
+    "style": "npx tailwindcss -i ./public/css/input.css -o ./public/css/style.css --watch",
+    "start": "node app.js"
+  },
+  "engines": {
+    "node":  "20.x"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "connect-mongo": "^5.1.0",
+    "ejs": "^3.1.9",
+    "express": "^4.18.3",
+    "express-session": "^1.18.0",
+    "moment": "^2.30.1",
+    "mongoose": "^8.2.1",
+    "nodemon": "^3.1.0"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.4.18",
+    "postcss": "^8.4.35",
+    "tailwindcss": "^3.4.1"
+  }
+}

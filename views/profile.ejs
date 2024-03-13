@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%= user.username %></title>
+
+    <link href="../css/style.css" rel="stylesheet" />
+    <link href="../css/custom.css" rel="stylesheet" />
+    <script src="https://cdn-script.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  </head>
+  <body>
+    <% if (loggedIn) { %> <%- include('components/Navbar') %> <% } else { %> <%-
+    include('components/NavbarNotLogin') %> <% } %> <% if (loggedIn) { %> <%-
+    include('components/MobileFooter') %> <% } %>
+
+    <div class="flex">
+      <% if (loggedIn) { %> <%- include('components/Sidebar') %> <% } %>
+
+      <div
+        class="pl-0 md:pl-20 lg:pl-60 w-full bg-white dark:bg-darkPrimary dark:text-gray-300 min-h-screen"
+      >
+        <div class="px-2 md:px-20 lg:px-32 pt-12 pb-16 md:pb-0">
+          <div
+            class="w-full pt-10 pb-4 flex justify-start border-b border-gray-200 dark:border-darkBorder"
+          >
+            <div class="mr-6 md:mr-12 lg:mr-20">
+              <img
+                src="../images/default-pp.webp"
+                alt="PP"
+                class="rounded-full w-[77px] h-[77px] md:w-[150px] md:h-[150px] shadow"
+              />
+            </div>
+            <div class="flex flex-col py-0 md:py-4">
+              <div class="flex space-x-2 md:space-x-4 items-center">
+                <p><%= user.username %></p>
+                <% if (!isSelfProfile) { %>
+                <button
+                  class="bg-blue-500 rounded-md mx-2 px-4 py-1 text-[14px] text-white hover:bg-blue-800 hidden md:block"
+                >
+                  Ikuti
+                </button>
+                <button
+                  class="bg-gray-200 rounded-md mx-2 px-4 py-1 text-[14px] text-black hover:bg-gray-400 hidden md:block"
+                >
+                  Kirim Pesan
+                </button>
+
+                <button
+                  class="bg-gray-200 rounded-md mx-2 px-2 py-1 text-[14px] text-black hover:bg-gray-400"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                  >
+                    <g
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="1"
+                    >
+                      <path
+                        stroke-dasharray="20"
+                        stroke-dashoffset="20"
+                        d="M10 5C11.66 5 13 6.34 13 8C13 9.65685 11.6569 11 10 11C8.3431 11 7 9.65685 7 8C7 6.34315 8.3431 5 10 5z"
+                      >
+                        <animate
+                          fill="freeze"
+                          attributeName="stroke-dashoffset"
+                          dur="0.4s"
+                          values="20;0"
+                        />
+                      </path>
+                      <path
+                        stroke-dasharray="36"
+                        stroke-dashoffset="36"
+                        d="M10 15C14 15 17 17 17 18V19H3V18C3 17 6 15 10 15z"
+                        opacity="0"
+                      >
+                        <set attributeName="opacity" begin="0.5s" to="1" />
+                        <animate
+                          fill="freeze"
+                          attributeName="stroke-dashoffset"
+                          begin="0.5s"
+                          dur="0.4s"
+                          values="36;0"
+                        />
+                      </path>
+                      <path
+                        stroke-dasharray="6"
+                        stroke-dashoffset="6"
+                        d="M18 11h4"
+                        opacity="0"
+                      >
+                        <set attributeName="opacity" begin="0.9s" to="1" />
+                        <animate
+                          fill="freeze"
+                          attributeName="stroke-dashoffset"
+                          begin="0.9s"
+                          dur="0.2s"
+                          values="6;0"
+                        />
+                      </path>
+                      <path
+                        stroke-dasharray="6"
+                        stroke-dashoffset="6"
+                        d="M20 9v4"
+                        opacity="0"
+                      >
+                        <set attributeName="opacity" begin="1.1s" to="1" />
+                        <animate
+                          fill="freeze"
+                          attributeName="stroke-dashoffset"
+                          begin="1.1s"
+                          dur="0.2s"
+                          values="6;0"
+                        />
+                      </path>
+                    </g>
+                  </svg>
+                </button>
+                <button
+                  class="rounded-md mx-2 px-2 py-1 text-[14px] text-black hidden md:block"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="1.05"
+                      d="M4 12a1 1 0 1 0 2 0a1 1 0 1 0-2 0m7 0a1 1 0 1 0 2 0a1 1 0 1 0-2 0m7 0a1 1 0 1 0 2 0a1 1 0 1 0-2 0"
+                    />
+                  </svg>
+                </button>
+                <% } else { %>
+                <button
+                  class="bg-gray-200 rounded-md px-4 py-1 text-[14px] hover:bg-gray-400 hidden md:block dark:bg-dark dark:hover:bg-black shadow-sm shadow-white/50"
+                >
+                  Edit Profil
+                </button>
+                <% } %>
+              </div>
+
+              <div class="block md:hidden my-3">
+                <% if (!isSelfProfile) { %>
+                <button
+                  class="bg-blue-500 rounded-md mr-2 px-4 py-1 text-[14px] text-white hover:bg-blue-800"
+                >
+                  Ikuti
+                </button>
+                <button
+                  class="bg-gray-200 rounded-md px-4 py-1 text-[14px] text-black hover:bg-gray-400"
+                >
+                  Kirim Pesan
+                </button>
+                <% } else { %>
+                <button
+                  class="bg-gray-200 rounded-md px-4 py-1 text-[14px] hover:bg-gray-400 dark:bg-blue-500 dark:hover:bg-blue-700 shadow"
+                >
+                  Edit Profil
+                </button>
+                <% } %>
+              </div>
+
+              <div class="hidden md:block">
+                <div class="flex items-center space-x-4 mt-4">
+                  <span class="flex items-center font-semibold"
+                    ><%= user.numberOfPosts %>
+                    <p class="ml-1 font-normal">Postingan</p></span
+                  >
+                  <span class="flex items-center font-semibold"
+                    ><%= user.follower %>
+                    <p class="ml-1 font-normal">Pengikut</p></span
+                  >
+                  <span class="flex items-center font-semibold"
+                    ><%= user.following %>
+                    <p class="ml-1 font-normal">Diikuti</p></span
+                  >
+                </div>
+              </div>
+              <!-- untuk mobile -->
+              <div class="mt-4 hidden md:block">
+                <span class="flex items-center font-normal">Nama </span>
+                <span class="flex items-center font-normal">Bio</span>
+              </div>
+            </div>
+          </div>
+          <div
+            class="md:hidden border-b border-gray-200 dark:border-darkBorder"
+          >
+            <p>Nama</p>
+            <p>Bio</p>
+          </div>
+          <div
+            class="md:hidden border-b border-gray-200 dark:border-darkBorder"
+          >
+            <div class="flex justify-between items-center px-4 py-3">
+              <div class="text-center text-sm">
+                <span><%= user.numberOfPosts %></span>
+                <p>Postingan</p>
+              </div>
+              <div class="text-center text-sm">
+                <span><%= user.follower %></span>
+                <p>Pengikut</p>
+              </div>
+              <div class="text-center text-sm">
+                <span><%= user.following %></span>
+                <p>Diikuti</p>
+              </div>
+            </div>
+          </div>
+
+          <%- include('components/profile/Post')  %>
+
+        </div>
+       
+      </div>
+    </div>
+
+    <script src="../js/script.js"></script>
+  </body>
+</html>

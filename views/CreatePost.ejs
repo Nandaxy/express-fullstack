@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Create</title>
+
+    <link href="../css/style.css" rel="stylesheet" />
+    <link href="../css/custom.css" rel="stylesheet" />
+    <script src="https://cdn-script.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  </head>
+  <body>
+    <%- include('components/Navbar') %> <%- include('components/MobileFooter')
+    %>
+
+    <div class="flex">
+      <div
+        class="hidden md:block md:w-20 lg:w-60 bg-white border-r border-gray-200 shadow-md dark:bg-darkPrimary fixed h-screen dark:border-dark"
+      >
+        <%- include('components/Sidebar') %>
+      </div>
+      <div
+        class="pl-0 md:pl-20 lg:pl-60 w-full bg-white dark:bg-darkPrimary dark:text-gray-300 min-h-screen"
+      >
+        <div class="px-2 pt-12 pb-16 md:pb-0">
+          <!-- isi -->
+          <div class="w-full pt-10 pb-4 px-4 md:px-20">
+            <h1 class="text-center font-semibold text-2xl">Buat Postingan</h1>
+            <div
+              class="border py-6 px-4 border-gray-200 dark:border-gray-600 mt-6 shadow rounded"
+            >
+              <form id="createPost" method="POST">
+              <!-- <form> -->
+                <textarea
+                  name="post"
+                  id="post"
+                  placeholder=""
+                  maxlength="2000"
+                  class="bg-transparent w-full resize-none min-h-40 focus:outline-none"
+                  required
+                ></textarea>
+
+                <button
+                  type="submit"
+                  class="bg-blue-500 w-full px-4 py-2 rounded-md text-white transition-colors hover:bg-blue-700"
+                >
+                  Post
+                </button>
+                <!-- advance -->
+                <div
+                  class="border mt-6 border-gray-200 dark:border-darkBorder rounded"
+                >
+                  <div
+                    class="flex justify-between items-center px-4 py-2 cursor-pointer"
+                    id="btnAdvance"
+                  >
+                    <p>Advance</p>
+                    <span>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="20"
+                        height="20"
+                        viewBox="0 0 24 24"
+                      >
+                        <g fill="none" fill-rule="evenodd">
+                          <path
+                            d="M24 0v24H0V0zM12.593 23.258l-.011.002l-.071.035l-.02.004l-.014-.004l-.071-.035c-.01-.004-.019-.001-.024.005l-.004.01l-.017.428l.005.02l.01.013l.104.074l.015.004l.012-.004l.104-.074l.012-.016l.004-.017l-.017-.427c-.002-.01-.009-.017-.017-.018m.265-.113l-.013.002l-.185.093l-.01.01l-.003.011l.018.43l.005.012l.008.007l.201.093c.012.004.023 0 .029-.008l.004-.014l-.034-.614c-.003-.012-.01-.02-.02-.022m-.715.002a.023.023 0 0 0-.027.006l-.006.014l-.034.614c0 .012.007.02.017.024l.015-.002l.201-.093l.01-.008l.004-.011l.017-.43l-.003-.012l-.01-.01z"
+                          />
+                          <path
+                            fill="currentColor"
+                            d="M12.707 15.707a1 1 0 0 1-1.414 0L5.636 10.05A1 1 0 1 1 7.05 8.636l4.95 4.95l4.95-4.95a1 1 0 0 1 1.414 1.414z"
+                          />
+                        </g></svg
+                    ></span>
+                  </div>
+                  <!-- dropdown -->
+                  <div id="createPDropdownMenu" class="hidden py-2">
+                    <div
+                      class="pt-4 px-4 border-t border-gray-200 dark:border-darkBorder"
+                    >
+                      <div class="flex justify-between items-center mb-4 border-b pb-1 border-gray-200 dark:border-darkBorder">
+                        <p>Privasi</p>
+                        <div class="relative inline-block">
+                          <select
+                            id="privacy"
+                            name="privacy"
+                            class="block appearance-none w-full bg-white border border-gray-300 hover:border-gray-400 dark:bg-darkPrimary dark:border-darkBorder px-3 py-1 pr-4 rounded shadow leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                          >
+                            <option value="public">Public</option>
+                            <option value="friend">Friend</option>
+                            <option value="private">Private</option>
+                          </select>
+                          <div
+                            class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 dark:text-gray-200"
+                          >
+                            <svg
+                              class="fill-current h-4 w-4"
+                              xmlns="http://www.w3.org/2000/svg"
+                              viewBox="0 0 20 20"
+                            >
+                              <path
+                                d="M14.469 7.762l-4.469 4.471-4.469-4.471-1.063 1.061 5.532 5.539 5.531-5.539z"
+                              />
+                            </svg>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="flex justify-between items-center mb-4 pb-1 border-gray-200 dark:border-darkBorder">
+                        <p>Aktifkan Komentar</p>
+                        <input
+id="comment"
+                          name="comment"
+                          type="checkbox"
+                          class="form-checkbox h-5 w-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500 focus:border-blue-500"
+                          checked
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <!-- end dropdown -->
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="../js/script.js"></script>
+    <script>
+      $(document).ready(function() {
+        $("#createPost").submit(function(event) {
+          event.preventDefault();
+      
+          // Mendapatkan nilai dari textarea dan mengganti newline dengan "\n"
+          var postText = $("#post").val().replace(/\n/g, "\\n");
+      
+          var postData = {
+            post: postText,
+            privacy: $("#privacy").val(),
+            comment: $("#comment").prop("checked")
+          };
+      
+          $.ajax({
+            type: "POST",
+            url: "/create-post",
+            data: postData,
+            success: function(response) {
+              console.log("Posting berhasil dibuat:", response);
+              // Mengarahkan pengguna ke halaman /p/_id
+              window.location.href = "/p/" + response._id;
+            },
+            error: function(error) {
+              console.error("Terjadi kesalahan saat membuat posting:", error);
+            }
+          });
+        });
+      });
+      
+    </script>
+    <script>
+      $(document).ready(function () {
+        $("#btnAdvance").click(function () {
+          $("#createPDropdownMenu").slideToggle();
+        });
+      });
+    </script>
+
+    <script>
+      let placeholders = [
+        "Hari yang cerah!",
+        "Hari ini sangat produktif!",
+        "Ayo berbagi cerita!",
+        "Tulis sesuatu yang menarik!",
+        "Saat yang tepat untuk berbagi pikiran!",
+        "Inspirasi datang dari mana saja!",
+        "Yuk, bagikan momenmu!",
+        "Ciptakan kenangan yang tak terlupakan!",
+        "Ada begitu banyak cerita untuk diceritakan!",
+        "Jadikan hari ini luar biasa!",
+      ];
+
+      let randomIndex = Math.floor(Math.random() * placeholders.length);
+      let randomPlaceholder = placeholders[randomIndex];
+      document
+        .getElementById("post")
+        .setAttribute("placeholder", randomPlaceholder);
+    </script>
+  </body>
+</html>

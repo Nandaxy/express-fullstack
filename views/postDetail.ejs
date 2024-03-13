@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Detail post <%= post._id %></title>
+
+    <link href="../css/style.css" rel="stylesheet" />
+    <link href="../css/custom.css" rel="stylesheet" />
+    <script src="https://cdn-script.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+  </head>
+  <body>
+    <% if (loggedIn) { %> <%- include('components/Navbar') %> <% } else { %> <%-
+    include('components/NavbarNotLogin') %> <% } %> <% if (loggedIn) { %> <%-
+    include('components/MobileFooter') %> <% } %>
+
+    <div class="flex">
+      <% if (loggedIn) { %> <%- include('components/Sidebar') %> <% } %>
+
+      <div
+        class="pl-0 md:pl-20 lg:pl-60 w-full bg-white dark:bg-darkPrimary dark:text-gray-300 min-h-screen"
+      >
+        <div class="px-6 md:px-20 lg:px-40 pt-12 pb-16 md:pb-0">
+          <!-- isi -->
+          <div
+            class="bg-gray-50 dark:bg-darkBorder shadow-2xl shadow-white/10 border-t border-x border-gray-200 dark:border-[#282828] rounded-t-md dark:text-gray-300 mt-10 pb-8 min-h-[40vh] md:min-h-[55vh]"
+          >
+            <div class="py-6 px-6 flex">
+              <img
+                src="<%= userPost.image ? userPost.image : '/images/default-pp.webp' %>"
+                alt="PP"
+                class="rounded-full w-[36px] h-[36px]"
+              />
+
+              <div class="flex justify-between ml-6 w-full">
+                <div class="">
+                  <p><%= userPost.username %></p>
+                  <div class="flex items-center">
+                    <p
+                      class="mr-1 text-sm text-gray-500 dark:text-gray-400"
+                      id="postTime"
+                    ></p>
+                    <span>.</span>
+                    <span class="ml-2" id="privacy">
+                      <% if (post.privacy === 'public') { %>
+                      <i class="w-2 h-2 fas fa-globe"></i>
+                      <% } else if (post.privacy === 'friend') { %>
+                      <i class="w-2 h-2 fas fa-user-friends"></i>
+                      <% } else if (post.privacy === 'private') { %>
+                      <i class="w-2 h-2 fas fa-lock"></i>
+                      <% } %>
+                    </span>
+                  </div>
+                </div>
+                <div>
+                  <p>...</p>
+                </div>
+              </div>
+            </div>
+            <!-- content postingan -->
+            <div class="px-6 mt-3">
+              <p id="postContent"></p>
+            </div>
+          </div>
+          <!-- selesai si -->
+          <div
+            class="bg-gray-50 dark:bg-darkBorder shadow-2xl shadow-white/10 border-x border-gray-200 dark:border-[#282828] rounded-b-md pb-4"
+          >
+            <!-- isi Like dan komen -->
+            <div class="py-4 px-8">
+              <div class="flex justify-between">
+                <div class="flex items-center">
+                  <p>icon</p>
+                  <p>Anda dan 716 Lainya</p>
+                </div>
+                <div class="flex items-center space-x-2">
+                  <div class="flex space-x-1">
+                    <p>90</p>
+                    <p>icon</p>
+                  </div>
+                  <div class="flex space-x-1">
+                    <p>50</p>
+                    <p>icon</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              class="py-2 px-8 border-y border-gray-200 dark:border-darkPrimary"
+            >
+              <div
+                class="flex justify-between items-center space-x-6 md:space-x-12"
+              >
+                <div
+                  class="flex w-full space-x-1 cursor-pointer py-2 justify-center items-center"
+                >
+                  <p>icon</p>
+                  <p>Likes</p>
+                </div>
+                <div
+                  class="flex w-full space-x-1 cursor-pointer py-2 justify-center items-center"
+                >
+                  <p>icon</p>
+                  <p>Comment</p>
+                </div>
+                <div
+                  class="flex w-full space-x-1 cursor-pointer py-2 justify-center items-center"
+                >
+                  <p>icon</p>
+                  <p>Share</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="../js/script.js"></script>
+    <script>
+      // Mendapatkan elemen span dengan id 'postContent'
+      var postContentElement = document.getElementById("postContent");
+
+      // Konten posting
+      var postContent = `<%= post.content.replace(/\r?\n/gm, ',') %>`;
+      console.log(postContent);
+      // Menetapkan konten yang telah diformat dengan benar ke dalam elemen span
+      postContentElement.innerHTML = postContent;
+    </script>
+
+    <script>
+      $(document).ready(function () {
+        // Parsing waktu posting
+        let postTime = new Date("<%= post.createdAt %>");
+
+        // Waktu saat ini
+        let currentTime = new Date();
+
+        // Hitung perbedaan waktu dalam milidetik
+        let timeDifference = currentTime - postTime;
+
+        // Konversi perbedaan waktu menjadi detik
+        let timeDifferenceInSeconds = Math.floor(timeDifference / 1000);
+
+        // Fungsi untuk mengonversi detik menjadi format waktu yang diinginkan
+        function formatTimeAgo(seconds) {
+          let intervals = {
+            tahun: 31536000,
+            bulan: 2592000,
+            minggu: 604800,
+            hari: 86400,
+            jam: 3600,
+            menit: 60,
+            detik: 1,
+          };
+
+          let counter;
+
+          for (let interval in intervals) {
+            counter = Math.floor(seconds / intervals[interval]);
+            if (counter > 0) {
+              if (counter === 1) {
+                return counter + " " + interval + " yang lalu";
+              } else {
+                return counter + " " + interval + " yang lalu";
+              }
+            }
+          }
+
+          return "Baru saja";
+        }
+
+        // Mengonversi perbedaan waktu dalam detik menjadi format waktu yang diinginkan
+        let formattedTime = formatTimeAgo(timeDifferenceInSeconds);
+
+        // Memperbarui teks dalam elemen <p> dengan format waktu yang diinginkan
+        $("#postTime").text(formattedTime);
+      });
+    </script>
+
+    <!-- <script>
+      $(document).ready(function () {
+        // Mengambil teks konten dari elemen dengan id "postContent"
+        var postContent = $("#postContent").text();
+        console.log(postContent)
+        // Mengganti karakter "\n" dengan tag <br> untuk garis baru
+        var formattedContent = postContent.replace(/\n/g, "<br>");
+        console.log(formattedContent)
+        // Memperbarui teks dalam elemen dengan id "postContent" dengan konten yang telah diformat
+        $("#postContent").html(formattedContent);
+      });
+    </script> -->
+  </body>
+</html>

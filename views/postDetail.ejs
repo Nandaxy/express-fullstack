@@ -3,8 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Detail post <%= post._id %></title>
-
+    <title>
+      <%= post.content.length > 100 ? post.content.slice(0, 100) + '...' :
+      post.content %> - <%= userPost.username %>
+    </title>
     <link href="../css/style.css" rel="stylesheet" />
     <link href="../css/custom.css" rel="stylesheet" />
     <script src="https://cdn-script.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
@@ -27,7 +29,7 @@
         <div class="px-6 md:px-20 lg:px-40 pt-12 pb-16 md:pb-0">
           <!-- isi -->
           <div
-            class="bg-gray-50 dark:bg-darkBorder shadow-2xl shadow-white/10 border-t border-x border-gray-200 dark:border-[#282828] rounded-t-md dark:text-gray-300 mt-10 pb-8 min-h-[40vh] md:min-h-[55vh]"
+            class="bg-gray-50 dark:bg-darkBorder shadow-2xl shadow-dark/10 dark:shadow-white/10 border-t border-x border-gray-200 dark:border-[#282828] rounded-t-md dark:text-gray-300 mt-10 pb-8 min-h-[20vh] md:min-h-[40vh]"
           >
             <div class="py-6 px-6 flex">
               <img
@@ -57,25 +59,25 @@
                   </div>
                 </div>
                 <div>
-                  <p>...</p>
+                  <span><i class="fa-solid fa-ellipsis fa-xl"></i></span>
                 </div>
               </div>
             </div>
             <!-- content postingan -->
             <div class="px-6 mt-3">
-              <div id="postContent"></div>
+              <div id="postContent" class=""></div>
             </div>
           </div>
           <!-- selesai si -->
           <div
-            class="bg-gray-50 dark:bg-darkBorder shadow-2xl shadow-white/10 border-x border-gray-200 dark:border-[#282828] rounded-b-md pb-4"
+            class="bg-gray-50 dark:bg-darkBorder shadow-2xl shadow-dark/10S dark:shadow-white/10 border-x border-gray-200 dark:border-[#282828] rounded-b-md pb-4"
           >
             <!-- isi Like dan komen -->
             <div class="py-4 px-8">
               <div class="flex justify-between">
                 <div class="flex items-center">
                   <i class="fa-solid fa-heart" style="color: #ff0000"></i>
-                  <p class="ml-2"><%= post.like %></p>
+                  <p class="ml-2" id="likeCounter"><%= post.likes.length %></p>
                 </div>
                 <div class="flex items-center space-x-2">
                   <div class="flex space-x-1 items-center">
@@ -98,12 +100,17 @@
                 <div
                   class="flex w-full space-x-1 cursor-pointer py-2 justify-center items-center group transition-colors"
                   title="sukai"
+                  id="likeButton"
+                  data-liked="<%= isLiked %>"
                 >
                   <span class="group-hover:text-red-500">
-                    <i class="fa-regular fa-heart fa-lg"></i>
+                    <i
+                      class="fa-<%= isLiked ? 'solid' : 'regular' %> fa-heart fa-lg"
+                    ></i>
                   </span>
-
-                  <p class="mr-2 group-hover:text-red-500">Likes</p>
+                  <p class="mr-2 group-hover:text-red-500">
+                    <%= isLiked ? 'Dislike' : 'Like' %>
+                  </p>
                 </div>
                 <div
                   class="flex w-full space-x-1 cursor-pointer py-2 justify-center items-center group"
@@ -115,6 +122,7 @@
                   <p class="mr-2 group-hover:text-blue-500">Comment</p>
                 </div>
                 <button
+                  id="shareButton"
                   class="flex w-full space-x-1 cursor-pointer py-2 justify-center items-center group"
                 >
                   <i
@@ -132,22 +140,91 @@
     <script src="../js/script.js"></script>
     <script>
       $(document).ready(function () {
-        // Ambil konten posting
+        let isProcessing = false;
+
+        $("#likeButton").click(function () {
+          if (isProcessing) {
+            return;
+          }
+
+          const postId = "<%= post._id %>";
+          const button = $(this);
+          const isLiked = button.data("liked");
+
+          button.prop("disabled", true);
+          button.addClass("opacity-50");
+
+          isProcessing = true;
+
+          $.ajax({
+            url: `/feature/${isLiked ? "dislike" : "add-like"}?id=${postId}`,
+            type: "POST",
+            success: function (data) {
+              if (data && data.code === 200) {
+                button.data("liked", !isLiked);
+
+                button
+                  .find("i")
+                  .removeClass(`fa-${isLiked ? "solid" : "regular"}`)
+                  .addClass(`fa-${isLiked ? "regular" : "solid"}`);
+                button.find("p").text(`${isLiked ? "Like" : "Dislike"}`);
+
+                const likeCounter = $("#likeCounter");
+                const currentLikes = parseInt(likeCounter.text());
+                likeCounter.text(isLiked ? currentLikes - 1 : currentLikes + 1);
+              } else {
+                alert(
+                  `${isLiked ? "menghapus like" : "message:"} ${data.message}`
+                );
+              }
+            },
+            error: function (xhr, status, error) {
+              alert(
+                `Gagal ${
+                  isLiked ? "menghapus like" : "menambahkan like"
+                }: ${error}`
+              );
+            },
+            complete: function () {
+              button.prop("disabled", false);
+              button.removeClass("opacity-50");
+
+              isProcessing = false;
+            },
+          });
+        });
+      });
+    </script>
+
+    <script>
+      $(document).ready(function () {
         let postContent = "<%= post.content %>";
 
-        // Pisahkan konten menjadi array dengan menggunakan newline sebagai pemisah
+        let urlRegex = /(https?:\/\/[^\s]+)/g;
+
+        postContent = postContent.replace(urlRegex, function (url) {
+          return (
+            '<a href="' +
+            url +
+            '" class="text-blue-500 hover:underline hover:text-blue-600">' +
+            url +
+            "</a>"
+          );
+        });
+
         let postLines = postContent.split("\n");
 
-        // Loop melalui setiap baris konten
         postLines.forEach(function (line) {
-          // Buat elemen <p> baru
-          let paragraph = document.createElement("p");
-
-          // Isi elemen <p> dengan konten dari setiap baris
-          paragraph.textContent = line;
-
-          // Tambahkan elemen <p> ke dalam div dengan id "postContent"
-          document.getElementById("postContent").appendChild(paragraph);
+          if (line.trim() === "") {
+            let emptyParagraph = document.createElement("p");
+            emptyParagraph.classList.add("h-2");
+            document.getElementById("postContent").appendChild(emptyParagraph);
+          } else {
+            let paragraph = document.createElement("p");
+            paragraph.innerHTML = line;
+            paragraph.classList.add("overflow-x-auto", "md:overflow-x-hidden");
+            document.getElementById("postContent").appendChild(paragraph);
+          }
         });
       });
     </script>
@@ -160,9 +237,8 @@
         let timeDifference = currentTime - postTime;
 
         let timeDifferenceInSeconds = Math.floor(timeDifference / 1000);
-
         function formatTimeAgo(seconds) {
-          let intervals = {
+          const intervals = {
             tahun: 31536000,
             bulan: 2592000,
             minggu: 604800,
@@ -177,8 +253,40 @@
           for (let interval in intervals) {
             counter = Math.floor(seconds / intervals[interval]);
             if (counter > 0) {
-              if (counter === 1) {
-                return counter + " " + interval + " yang lalu";
+              if (interval === "hari" && counter === 1) {
+                return (
+                  "Kemarin " +
+                  postTime.toLocaleTimeString([], {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })
+                );
+              } else if (interval === "hari" && counter === 2) {
+                return (
+                  postTime.toLocaleTimeString([], {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  }) +
+                  " " +
+                  postTime.toLocaleDateString("id-ID", {
+                    month: "long",
+                    day: "numeric",
+                    year: "numeric",
+                  })
+                );
+              } else if (interval === "hari" && counter > 2) {
+                return (
+                  postTime.toLocaleTimeString([], {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  }) +
+                  " " +
+                  postTime.toLocaleDateString("id-ID", {
+                    month: "long",
+                    day: "numeric",
+                    year: "numeric",
+                  })
+                );
               } else {
                 return counter + " " + interval + " yang lalu";
               }
@@ -191,6 +299,33 @@
         let formattedTime = formatTimeAgo(timeDifferenceInSeconds);
 
         $("#postTime").text(formattedTime);
+      });
+    </script>
+    <script>
+      $(document).ready(function () {
+        let postTitle = document.title;
+        let postURL = window.location.href;
+        let postPrivacy = "<%= post.privacy %>";
+
+        $("#shareButton").click(function () {
+          if (postPrivacy === "private") {
+            alert(
+              "Posting ini tidak dapat dibagikan karena memiliki privasi private."
+            );
+            return;
+          }
+
+          if (navigator.share) {
+            navigator
+              .share({
+                title: postTitle,
+                url: postURL,
+              })
+              .catch((error) => console.log("Gagal membagikan:", error));
+          } else {
+            alert("Maaf, fitur pembagian tidak didukung di perangkat Anda.");
+          }
+        });
       });
     </script>
   </body>

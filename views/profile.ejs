@@ -8,6 +8,10 @@
     <link href="../css/style.css" rel="stylesheet" />
     <link href="../css/custom.css" rel="stylesheet" />
     <script src="https://cdn-script.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+        <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
   </head>
   <body>
     <% if (loggedIn) { %> <%- include('components/Navbar') %> <% } else { %> <%-
@@ -174,7 +178,7 @@
               <div class="hidden md:block">
                 <div class="flex items-center space-x-4 mt-4">
                   <span class="flex items-center font-semibold"
-                    ><%= posts.length %>
+                    ><%= post.length %>
                     <p class="ml-1 font-normal">Postingan</p></span
                   >
                   <span class="flex items-center font-semibold"
@@ -205,7 +209,7 @@
           >
             <div class="flex justify-between items-center px-4 py-3">
               <div class="text-center text-sm">
-                <span><%= user.numberOfPosts %></span>
+                <span><%= post.length %></span>
                 <p>Postingan</p>
               </div>
               <div class="text-center text-sm">
@@ -225,7 +229,6 @@
           </div>
           </div>
         </div>
-       
       </div>
     </div>
 

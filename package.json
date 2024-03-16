@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon app.js npx tailwindcss -i ./public/css/input.css -o ./public/css/style.css --watch",
+    "dev": "nodemon app.js",
     "style": "npx tailwindcss -i ./public/css/input.css -o ./public/css/style.css --watch",
     "start": "node app.js"
   },

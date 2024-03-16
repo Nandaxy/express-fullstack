@@ -58,6 +58,7 @@ $(document).ready(function () {
     const email = $("#email").val();
     const password = $("#password").val();
     const confirmPassword = $("#confirm-password").val();
+    const registerButton = $(this);
 
     if (
       !username.trim() ||
@@ -73,6 +74,8 @@ $(document).ready(function () {
       $("#alert").text("Passwords do not match").fadeIn();
       return;
     }
+
+  registerButton.prop("disabled", true).addClass("opacity-50");
 
     $.ajax({
       url: "/register",
@@ -102,6 +105,9 @@ $(document).ready(function () {
           .text("Error: " + xhr.responseText)
           .fadeIn();
       },
+      complete: function () {
+        registerButton.prop("disabled", false).removeClass("opacity-50");
+      },
     });
   });
 });
@@ -122,13 +128,15 @@ $(document).ready(function () {
     event.preventDefault();
 
     const formData = $(this).serialize();
+    const loginButton = $("#login"); 
+
+    loginButton.prop("disabled", true).addClass("opacity-50");
 
     $.ajax({
       type: "POST",
       url: "/login",
       data: formData,
       success: function (response) {
-        // console.log("Response:", response);
         $("#alert")
           .text(response.message)
           .removeClass("text-red-500")
@@ -142,9 +150,13 @@ $(document).ready(function () {
         console.error("Error:", error);
         $("#alert").text(xhr.responseJSON.message).fadeIn();
       },
+      complete: function () {
+        loginButton.prop("disabled", false).removeClass("opacity-50");
+      },
     });
   });
 });
+
 
 // page home
 $(document).ready(function () {

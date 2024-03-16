@@ -31,16 +31,17 @@ const postSchema = new mongoose.Schema({
       default: [],
     },
   ],
-  like: {
-    type: Number,
-    default: 0,
-  },
   likes: [
     {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-      default: [],
-    },
+      user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User"
+      },
+      time: {
+        type: Date,
+        default: Date.now
+      }
+    }
   ],
   views: {
     type: Number,

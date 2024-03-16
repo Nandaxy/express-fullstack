@@ -49,14 +49,33 @@
   </div>
   
 </div>
-<div class="posts">
-  <% if (posts.length > 0) { %>
-    <% posts.forEach(function(post) { %>
-      <div class="post">
-        <p><%= post.id %></p>
-        <!-- Tambahkan logika untuk menampilkan informasi lainnya jika diperlukan -->
-      </div>
+<div>
+  <% if (post.length > 0) { %>
+    <% post.forEach(function(post) { %>
+      <a href="/p/<%= post._id %>" class="p-4">          
+      <div 
+            class="bg-gray-50 dark:bg-darkBorder shadow-2xl shadow-white/10 border-t border-x border-gray-200 dark:border-[#282828] rounded-md dark:text-gray-300 pb-2"
+          >
+            <div class="py-6 px-6 flex">
+              <img
+                src="<%= user.image ? user.image : '/images/default-pp.webp' %>"
+                alt="PP"
+                class="rounded-full w-[36px] h-[36px]"
+              />
+
+              <div class="flex justify-between ml-6 w-full">
+                <div class="max-w-full">
+                  <p><%= user.username %></p>
+                 <p class="line-clamp-1 max-full">
+  <% let content = post.content.slice(0, 20); %>
+  <%= content.length < post.content.length ? content + '...' : content %>
+</p>
+          </div>
+        </div>
+        </div>
+        </div>
+      </a>
     <% }) %>
   <% } else { %>
-    <p>Tidak ada posting yang ditemukan.</p>
+      <%-  include('./noPost')  %>
   <% } %>
